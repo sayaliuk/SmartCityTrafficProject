@@ -1,0 +1,9 @@
+{
+	"name": "adf-smartcitytraffic",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "68fc1c07-9a45-4ed0-8348-1bc0d176a96d",
+		"tenantId": "a85c98a4-0663-4273-a068-d2229ab382a5"
+	}
+}
