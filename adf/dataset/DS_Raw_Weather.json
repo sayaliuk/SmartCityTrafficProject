@@ -1,0 +1,49 @@
+{
+	"name": "DS_Raw_Weather",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_SmartCity",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "weather.csv",
+				"folderPath": "weather",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "StationID",
+				"type": "String"
+			},
+			{
+				"name": "StationName",
+				"type": "String"
+			},
+			{
+				"name": "Timestamp",
+				"type": "String"
+			},
+			{
+				"name": "Temperature",
+				"type": "String"
+			},
+			{
+				"name": "Precipitation",
+				"type": "String"
+			},
+			{
+				"name": "WindSpeed",
+				"type": "String"
+			}
+		]
+	}
+}

@@ -1,0 +1,41 @@
+{
+	"name": "DS_Raw_Routes",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_SmartCity",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "routes.csv",
+				"folderPath": "routes",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "RouteID",
+				"type": "String"
+			},
+			{
+				"name": "RouteName",
+				"type": "String"
+			},
+			{
+				"name": "StartPoint",
+				"type": "String"
+			},
+			{
+				"name": "EndPoint",
+				"type": "String"
+			}
+		]
+	}
+}

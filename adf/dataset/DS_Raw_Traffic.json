@@ -1,0 +1,49 @@
+{
+	"name": "DS_Raw_Traffic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_SmartCity",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "traffic_sensors.csv",
+				"folderPath": "traffic",
+				"fileSystem": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "SensorID",
+				"type": "String"
+			},
+			{
+				"name": "Timestamp",
+				"type": "String"
+			},
+			{
+				"name": "Latitude",
+				"type": "String"
+			},
+			{
+				"name": "Longitude",
+				"type": "String"
+			},
+			{
+				"name": "VehicleCount",
+				"type": "String"
+			},
+			{
+				"name": "AvgSpeed",
+				"type": "String"
+			}
+		]
+	}
+}
