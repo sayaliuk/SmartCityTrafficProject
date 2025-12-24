@@ -1,0 +1,46 @@
+{
+	"name": "ds_sql_facttraffic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASQLDB",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "Timestamp",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "SensorID",
+				"type": "nvarchar"
+			},
+			{
+				"name": "VehicleCount",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AvgSpeed",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "TrafficDensity",
+				"type": "float",
+				"precision": 15
+			},
+			{
+				"name": "CongestionLevel",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "FactTraffic"
+		}
+	}
+}

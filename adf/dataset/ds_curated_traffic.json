@@ -1,0 +1,73 @@
+{
+	"name": "ds_curated_traffic",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ASD",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "traffic_summary",
+				"fileSystem": "curated"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "Timestamp",
+				"type": "INT96"
+			},
+			{
+				"name": "SensorID",
+				"type": "UTF8"
+			},
+			{
+				"name": "Latitude",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Longitude",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "VehicleCount",
+				"type": "INT_32"
+			},
+			{
+				"name": "AvgSpeed",
+				"type": "INT_32"
+			},
+			{
+				"name": "StationID",
+				"type": "UTF8"
+			},
+			{
+				"name": "StationName",
+				"type": "UTF8"
+			},
+			{
+				"name": "Temperature",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "Precipitation",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "WindSpeed",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "TrafficDensity",
+				"type": "DOUBLE"
+			},
+			{
+				"name": "CongestionLevel",
+				"type": "UTF8"
+			}
+		]
+	}
+}
