@@ -1,0 +1,17 @@
+{
+	"name": "LS_ASQLDB",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "smartcity-sql-server.database.windows.net",
+			"database": "SmartCityTrafficDB",
+			"encrypt": "mandatory",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "sqlserver",
+			"encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIkRBVEFGQUNUT1JZQERFM0RCQTQ5LTdFRDUtNDUzQy1BQTc0LTEzM0NGRThFMjI1MF9kNDI5MjgyNS02YjQzLTRmNWMtOTRkYS1iMjBmYmM0ZGVhZWMiDQp9"
+		}
+	}
+}
