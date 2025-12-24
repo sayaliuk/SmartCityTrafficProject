@@ -8,8 +8,26 @@
 		"LS_ADLS_SmartCity_accountKey": {
 			"value": ""
 		},
+		"LS_ASD_accountKey": {
+			"value": ""
+		},
+		"LS_ASQLDB_password": {
+			"value": ""
+		},
 		"LS_ADLS_SmartCity_properties_typeProperties_url": {
 			"value": "https://smartcitytrafficdl.dfs.core.windows.net/"
+		},
+		"LS_ASD_properties_typeProperties_url": {
+			"value": "https://smartcitytrafficdl.dfs.core.windows.net/"
+		},
+		"LS_ASQLDB_properties_typeProperties_server": {
+			"value": "smartcity-sql-server.database.windows.net"
+		},
+		"LS_ASQLDB_properties_typeProperties_database": {
+			"value": "SmartCityTrafficDB"
+		},
+		"LS_ASQLDB_properties_typeProperties_userName": {
+			"value": "sqlserver"
 		},
 		"containerUri": {
 			"value": ""

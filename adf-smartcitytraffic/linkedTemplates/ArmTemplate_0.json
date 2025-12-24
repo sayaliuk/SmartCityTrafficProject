@@ -11,9 +11,33 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_SmartCity'"
 		},
+		"LS_ASD_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_ASD'"
+		},
+		"LS_ASQLDB_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'LS_ASQLDB'"
+		},
 		"LS_ADLS_SmartCity_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://smartcitytrafficdl.dfs.core.windows.net/"
+		},
+		"LS_ASD_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://smartcitytrafficdl.dfs.core.windows.net/"
+		},
+		"LS_ASQLDB_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "smartcity-sql-server.database.windows.net"
+		},
+		"LS_ASQLDB_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "SmartCityTrafficDB"
+		},
+		"LS_ASQLDB_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqlserver"
 		}
 	},
 	"variables": {
@@ -32,6 +56,45 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('LS_ADLS_SmartCity_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ASD')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_ASD_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_ASD_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_ASQLDB')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('LS_ASQLDB_properties_typeProperties_server')]",
+					"database": "[parameters('LS_ASQLDB_properties_typeProperties_database')]",
+					"encrypt": "mandatory",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('LS_ASQLDB_properties_typeProperties_userName')]",
+					"password": {
+						"type": "SecureString",
+						"value": "[parameters('LS_ASQLDB_password')]"
 					}
 				}
 			},
@@ -358,6 +421,135 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_curated_traffic')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ASD",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "traffic_summary",
+						"fileSystem": "curated"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": [
+					{
+						"name": "Timestamp",
+						"type": "INT96"
+					},
+					{
+						"name": "SensorID",
+						"type": "UTF8"
+					},
+					{
+						"name": "Latitude",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Longitude",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "VehicleCount",
+						"type": "INT_32"
+					},
+					{
+						"name": "AvgSpeed",
+						"type": "INT_32"
+					},
+					{
+						"name": "StationID",
+						"type": "UTF8"
+					},
+					{
+						"name": "StationName",
+						"type": "UTF8"
+					},
+					{
+						"name": "Temperature",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "Precipitation",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "WindSpeed",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "TrafficDensity",
+						"type": "DOUBLE"
+					},
+					{
+						"name": "CongestionLevel",
+						"type": "UTF8"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ASD')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_sql_facttraffic')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_ASQLDB",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "Timestamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "SensorID",
+						"type": "nvarchar"
+					},
+					{
+						"name": "VehicleCount",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AvgSpeed",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "TrafficDensity",
+						"type": "float",
+						"precision": 15
+					},
+					{
+						"name": "CongestionLevel",
+						"type": "nvarchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "FactTraffic"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_ASQLDB')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/PL_Raw_to_Processed')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -618,6 +810,152 @@
 				"[concat(variables('factoryId'), '/datasets/DS_Processed_Buses')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Raw_Routes')]",
 				"[concat(variables('factoryId'), '/datasets/DS_Processed_Routes')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/PL_Curated_To_SQL')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy to SQL",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "*.parquet",
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "ParquetReadSettings"
+								}
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"writeBehavior": "insert",
+								"sqlWriterUseTableLock": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Timestamp",
+											"type": "DateTime",
+											"physicalType": "INT96"
+										},
+										"sink": {
+											"name": "Timestamp",
+											"type": "DateTime",
+											"physicalType": "datetime"
+										}
+									},
+									{
+										"source": {
+											"name": "SensorID",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "SensorID",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									},
+									{
+										"source": {
+											"name": "VehicleCount",
+											"type": "Int32",
+											"physicalType": "INT_32"
+										},
+										"sink": {
+											"name": "VehicleCount",
+											"type": "Int32",
+											"physicalType": "int"
+										}
+									},
+									{
+										"source": {
+											"name": "AvgSpeed",
+											"type": "Int32",
+											"physicalType": "INT_32"
+										},
+										"sink": {
+											"name": "AvgSpeed",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "TrafficDensity",
+											"type": "Double",
+											"physicalType": "DOUBLE"
+										},
+										"sink": {
+											"name": "TrafficDensity",
+											"type": "Double",
+											"physicalType": "float"
+										}
+									},
+									{
+										"source": {
+											"name": "CongestionLevel",
+											"type": "String",
+											"physicalType": "UTF8"
+										},
+										"sink": {
+											"name": "CongestionLevel",
+											"type": "String",
+											"physicalType": "nvarchar"
+										}
+									}
+								],
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_curated_traffic",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "ds_sql_facttraffic",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_curated_traffic')]",
+				"[concat(variables('factoryId'), '/datasets/ds_sql_facttraffic')]"
 			]
 		}
 	]
